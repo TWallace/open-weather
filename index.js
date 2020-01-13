@@ -4,7 +4,7 @@ const fs = require('fs')
 
 const ONE_MINUTE = 60000
 const REQUEST_FREQUENCY_MINUTES = 10
-const API_KEY = process.env.OPENWEATHER_API_KEY
+const API_KEY = process.env.OPENWEATHER_API_KEY || fs.readFileSync('api-key.txt', 'utf8')
 const LOCATION_ID = '5810301'
 const DEGREE_SYMBOL = '°'
 const OUTPUT_FOLDER = './output/'
