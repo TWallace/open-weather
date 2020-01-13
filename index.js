@@ -49,6 +49,7 @@ function getWindDirectionString (degrees) {
 }
 
 function getTemperatureString (value) {
+  value = Math.round(value * 10) / 10
   return `${value}${DEGREE_SYMBOL}F`
 }
 
