@@ -3,6 +3,7 @@ const _ = require('lodash')
 const fs = require('fs')
 
 const ONE_MINUTE = 60000
+const REQUEST_FREQUENCY_MINUTES = 10
 const API_KEY = process.env.OPENWEATHER_API_KEY
 const LOCATION_ID = '5810301'
 const DEGREE_SYMBOL = '°'
@@ -89,12 +90,9 @@ function getCurrentWeather () {
 }
 
 function init () {
-  // setInterval(() => {
-  //   return getCurrentWeather()
-  // }, 11 * ONE_MINUTE)
-  return getCurrentWeather()
+  setInterval(() => {
+    return getCurrentWeather()
+  }, REQUEST_FREQUENCY_MINUTES * ONE_MINUTE)
 }
 
 module.exports = init
-
-init()
