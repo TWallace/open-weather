@@ -73,9 +73,6 @@ function getCurrentWeather () {
       }
 
       let currentTemperature = getTemperatureString(temperature.temp)
-      let minTemperature = getTemperatureString(temperature.temp_min)
-      let maxTemperature = getTemperatureString(temperature.temp_max)
-
       let wind = _.get(list, '[0].wind')
       let windDirection = getWindDirectionString(wind.deg)
       let windSpeed = ` at ${wind.speed} MPH`
