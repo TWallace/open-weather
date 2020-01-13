@@ -1,0 +1,25 @@
+{
+  "name": "open-weather",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TWallace/open-weather.git"
+  },
+  "author": "Tom Wallace",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TWallace/open-weather/issues"
+  },
+  "homepage": "https://github.com/TWallace/open-weather#readme",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "lodash": "^4.17.15",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5"
+  }
+}
