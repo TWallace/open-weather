@@ -91,9 +91,12 @@ function getCurrentWeather () {
 }
 
 function init () {
-  setInterval(() => {
-    return getCurrentWeather()
-  }, REQUEST_FREQUENCY_MINUTES * ONE_MINUTE)
+  return getCurrentWeather()
+    .then(() => {
+      setInterval(() => {
+        return getCurrentWeather()
+      }, REQUEST_FREQUENCY_MINUTES * ONE_MINUTE)
+    }) 
 }
 
 module.exports = init
