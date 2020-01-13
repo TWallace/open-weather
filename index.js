@@ -56,6 +56,7 @@ function getCurrentWeather () {
   let params = {
     uri: `http://api.openweathermap.org/data/2.5/forecast?units=${UNITS}&id=${LOCATION_ID}&APPID=${API_KEY}`
   }
+  console.log(`Requesting weather data from Open Weather at ${new Date().toISOString()}`)
   return request(params)
     .then(resp => {
       let jsonResp = JSON.parse(resp)
