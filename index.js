@@ -12,7 +12,7 @@ const UNITS = 'imperial'
 
 function getWindDirectionString (degrees) {
   let direction
-  if (degrees <= 11.25 && degrees > 348.75) {
+  if (degrees <= 11.25 || degrees > 348.75) {
     direction = 'N'
   } else if (degrees <= 33.75 && degrees > 11.25) {
     direction = 'NNE'
