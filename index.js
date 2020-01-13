@@ -1,9 +1,12 @@
 const request = require('request-promise')
 const _ = require('lodash')
+const fs = require('fs')
 
 const ONE_MINUTE = 60000
-const API_KEY = 'b1c3ab8f873b092a1e97de748671abe8'
+const API_KEY = process.env.OPENWEATHER_API_KEY
 const LOCATION_ID = '5810301'
+const DEGREE_SYMBOL = '°'
+const outputFolder = './output/'
 
 function getWindDirectionString (degrees) {
   if (degrees <= 11.25 && degrees > 348.75) {
@@ -42,14 +45,21 @@ function getWindDirectionString (degrees) {
   return `${degrees} is not a valid value for wind degrees`
 }
 
+function getTemperatureString (value) {
+  return `${value}${DEGREE_SYMBOL}F`
+}
+
 function getCurrentWeather () {
   let params = {
-    uri: `http://api.openweathermap.org/data/2.5/forecast?id=${LOCATION_ID}&APPID=${API_KEY}`
+    uri: `http://api.openweathermap.org/data/2.5/forecast?units=imperial&id=${LOCATION_ID}&APPID=${API_KEY}`,
+    headers: {
+      'Content-Type': 'application/json'
+    }
   }
   return request(params)
     .then(resp => {
-      console.log('resp: ', resp)
-      let list = resp.list
+      let jsonResp = JSON.parse(resp)
+      let list = jsonResp.list
       if (!list.length) {
         console.error('No "list" found in response.')
         return
@@ -61,14 +71,17 @@ function getCurrentWeather () {
         return
       }
 
-      let currentTemperature = weather.main.temp
-      let minTemperature = weather.main.temp_min
-      let maxTEmperature = weather.main.temp_max
+      let currentTemperature = getTemperatureString(temperature.temp)
+      let minTemperature = getTemperatureString(temperature.temp_min)
+      let maxTEmperature = getTemperatureString(temperature.temp_max)
 
-      let wind = _.get(list, '[0].weather')
-      let windDirection = getWindDirection(wind.deg)
+      let wind = _.get(list, '[0].wind')
+      let windDirection = getWindDirectionString(wind.deg)
+      let windSpeed = `${wind.speed} MPH`
 
-
+      fs.writeFileSync(`${outputFolder}temperature.txt`, currentTemperature)
+      fs.writeFileSync(`${outputFolder}wind-direction.txt`, windDirection)
+      fs.writeFileSync(`${outputFolder}wind-speed.txt`, windSpeed)
     })
     .catch(err => {
       console.error(err)
@@ -80,6 +93,7 @@ function init () {
   // setInterval(() => {
   //   return getCurrentWeather()
   // }, 11 * ONE_MINUTE)
+  console.log('Calling getCurrentWeather')
   return getCurrentWeather()
 }
 
