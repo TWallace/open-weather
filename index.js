@@ -5,7 +5,8 @@ const fs = require('fs')
 const ONE_MINUTE = 60000
 const REQUEST_FREQUENCY_MINUTES = 10
 const API_KEY = process.env.OPENWEATHER_API_KEY || fs.readFileSync('api-key.txt', 'utf8')
-const LOCATION_ID = '5810301'
+const LATITUDE = 47.736660
+const LONGITUDE = -122.342430
 const DEGREE_SYMBOL = '°'
 const OUTPUT_FOLDER = './output/'
 const UNITS = 'imperial'
@@ -55,26 +56,21 @@ function getTemperatureString (value) {
 
 function getCurrentWeather () {
   let params = {
-    uri: `http://api.openweathermap.org/data/2.5/forecast?units=${UNITS}&id=${LOCATION_ID}&APPID=${API_KEY}`
+    uri: `http://api.openweathermap.org/data/2.5/weather?units=${UNITS}&lat=${LATITUDE}&lon=${LONGITUDE}&APPID=${API_KEY}`
   }
   console.log(`Requesting weather data from Open Weather at ${new Date().toISOString()}`)
   return request(params)
     .then(resp => {
       let jsonResp = JSON.parse(resp)
-      let list = jsonResp.list
-      if (!list.length) {
-        console.error('No "list" found in response.')
-        return
-      }
 
-      let temperature = _.get(list, '[0].main')
+      let temperature = _.get(jsonResp, 'main')
       if (!temperature) {
         console.error('Invalid response from Open Weather.')
         return
       }
 
       let currentTemperature = getTemperatureString(temperature.temp)
-      let wind = _.get(list, '[0].wind')
+      let wind = _.get(jsonResp, 'wind')
       let windDirection = getWindDirectionString(wind.deg)
       let windSpeed = ` at ${wind.speed} MPH`
 
